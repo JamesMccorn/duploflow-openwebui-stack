@@ -1,0 +1,57 @@
+version: "3.8"
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  open-webui-data:
+
+services:
+  # =========================
+  # OPEN WEBUI
+  # =========================
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - open-webui-data:/app/backend/data
+    environment:
+      # LLM backend – adjust for actual env later
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+
+      # Optional OpenAI-compatible backend
+      # - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL}
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.open-webui.rule=Host(`${OPEN_WEBUI_HOST}`)"
+      - "traefik.http.routers.open-webui.entrypoints=web"
+      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+
+  # =========================
+  # MCPO (MCP → OpenAPI proxy)
+  # =========================
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    container_name: mcpo
+    restart: unless-stopped
+    networks:
+      - proxy
+    command:
+      - "--port"
+      - "8000"
+      - "--api-key"
+      - "${MCPO_API_KEY}"
+      - "--config"
+      - "/config/config.json"
+      - "--hot-reload"
+    volumes:
+      - ./mcpo-config:/config
+    labels:
+      - "traefik.enable=false"
