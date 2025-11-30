@@ -19,9 +19,13 @@ Git-driven stack for deploying Open WebUI behind your existing Traefik + Cloudfl
 Copy `.env.example` to `.env` and fill real secrets:
 - `OPEN_WEBUI_HOST` — public hostname (e.g. `chat.duploflow.com`).
 - `WEBUI_SECRET_KEY` — long random secret for Open WebUI sessions.
-- `OLLAMA_BASE_URL` — LLM backend (e.g. `http://ollama:11434`).
 - `MCPO_API_KEY` — shared secret for MCPO; reuse in Open WebUI tool configs.
 - Optional: `OPENAI_API_BASE_URL`, `OPENAI_API_KEY` for an OpenAI-compatible backend.
+
+## .env Setup Note
+- Copy `.env.example` → `.env`.
+- Set `OPEN_WEBUI_HOST`, `WEBUI_SECRET_KEY`, and `MCPO_API_KEY` with real values.
+- Do **not** set `OLLAMA_BASE_URL`; add Ollama servers inside Open WebUI’s admin UI using Tailscale IPs.
 
 ## Verification Checklist
 After deploy:

@@ -20,8 +20,6 @@ services:
     volumes:
       - open-webui-data:/app/backend/data
     environment:
-      # LLM backend – adjust for actual env later
-      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
 
       # Optional OpenAI-compatible backend
