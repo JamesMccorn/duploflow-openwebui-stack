@@ -38,9 +38,16 @@ services:
   mcpo:
     image: ghcr.io/open-webui/mcpo:main
     container_name: mcpo
-    restart: unless-stopped
+    # Limit restart attempts to prevent veth interface exhaustion on failure loops
+    restart: on-failure:5
     networks:
       - proxy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     command:
       - "--port"
       - "8000"
