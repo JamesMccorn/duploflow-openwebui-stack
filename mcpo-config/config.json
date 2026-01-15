@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "n8n-ollama": {
+    "n8n": {
       "type": "sse",
-      "url": "https://n8n.duploflow.com/mcp/ollama",
+      "url": "https://n8n.duploflow.com/mcp/mcpo",
       "headers": {
         "Authorization": "Bearer mf9VjHtISxGNTw8YizebwriGQ5oelhgQMbN4rWhl"
       }
